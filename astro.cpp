@@ -53,6 +53,7 @@ float Astronomy::getLocalSideralTime() {
   
   long ut1_2000_seconds_minus_2016 = time.getTimestamp() - 946728000L - ut1_2016_may_seconds;
   float greenwich_mean_sideral_time = 0.00027853830815299861 * ut1_2000_seconds_minus_2016;
+  greenwich_mean_sideral_time += 0.00027853830815299861 * time.getMillisFraction() / 1000;
   
   greenwich_mean_sideral_time += may_delta;
   greenwich_mean_sideral_time = fmod(greenwich_mean_sideral_time, 24);

@@ -10,10 +10,14 @@ class Time {
     
     DateTime getTime();
     long getTimestamp();
+    int getMillisFraction();
+    
     void setTime(long time);
     
   private:
     RTC_Millis softwareRtc;
+    long lastTime;
+    int millisStart;
 };
 
 extern Time time;

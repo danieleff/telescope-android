@@ -16,7 +16,19 @@ void Time::setTime(long time) {
   this->softwareRtc.adjust(time);
 }
 
-void  Time::loop() {
+void Time::loop() {
   
+}
+
+int Time::getMillisFraction() {
+  long now = this->getTimestamp();
+  if (now != this->lastTime) {
+    this->millisStart = millis();
+    this->lastTime = now;
+  }
+
+  int ret = millis() - this->millisStart;
+  if (ret > 1000) ret = 1000;
+  return ret;
 }
 
