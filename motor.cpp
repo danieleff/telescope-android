@@ -31,14 +31,18 @@ void Motor::setup(boolean a4988) {
   TCCR1A = 0;// set entire TCCR2A register to 0
   TCCR1B = 0;// same for TCCR2B
   TCNT1  = 0;//initialize counter value to 0
+  
   // set compare match register for 8khz increments
   OCR1A = 249;// = (16*10^6) / (8000*8) - 1 (must be <256)
+  //32Khz
+  //OCR1A = 62;// = (16*10^6) / (8000*8) - 1 (must be <256)
+  
   // turn on CTC mode
-  TCCR1A |= (1 << WGM21);
+  TCCR1A |= (1 << WGM11);
   // Set CS21 bit for 8 prescaler
-  TCCR1B |= (1 << CS21);   
+  TCCR1B |= (1 << CS11);   
   // enable timer compare interrupt
-  TIMSK1 |= (1 << OCIE2A);
+  TIMSK1 |= (1 << OCIE1A);
   interrupts();
 }
 
