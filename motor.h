@@ -3,8 +3,15 @@
 
 #include <AccelStepper.h>
 
-const float STEPPER_RA_TO_ARCMILLIS = 0.0001f;
-const float STEPPER_DEC_TO_ARCMILLIS = 0.0015f;
+const long steps_per_turn = 200;
+const long gear_ratio = 200;
+const long microstep = 1;
+
+//const float STEPPER_RA_TO_ARCMILLIS = 0.0001f;
+//const float STEPPER_DEC_TO_ARCMILLIS = 0.0015f;
+
+const float STEPPER_RA_TO_ARCMILLIS = 24.0f / steps_per_turn / gear_ratio / microstep;
+const float STEPPER_DEC_TO_ARCMILLIS = 360.0f / steps_per_turn / gear_ratio / microstep;
 
 const byte TRACKING_OFF=0;
 const byte TRACKING_FOLLOW=1;
