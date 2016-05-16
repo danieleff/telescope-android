@@ -9,13 +9,13 @@ void Joystick::loop() {
 
   
   int x = analogRead(A0);
-  if (x < 512 - 50) {
+  if (x < 512 - 80) {
     
     motor.setHaMaxSpeedPercent((512 - x) / 512.0f);
     motor.moveToHourAngle(motor.getHourAngle() + motor.getMaxHaPerSecond() * 0.3);
     joystickXUsed = true;
     
-  } else if (x > 512 + 50) {
+  } else if (x > 512 + 80) {
     
     motor.setHaMaxSpeedPercent((x - 512) / 512.0f);
     motor.moveToHourAngle(motor.getHourAngle() - motor.getMaxHaPerSecond() * 0.3);
@@ -25,18 +25,21 @@ void Joystick::loop() {
     
     motor.moveToHourAngle(motor.getHourAngle());
     motor.setHaMaxSpeedPercent(1);
-    joystickXUsed = false;
+    
+    if (!motor.isHaRunning()) {
+      joystickXUsed = false;
+    }
     
   }
 
   x = analogRead(A1);
-  if (x < 512 - 50) {
+  if (x < 512 - 80) {
   
     motor.setDecMaxSpeedPercent((512 - x) / 512.0f);
     motor.moveToDeclination(motor.getDeclination() + motor.getMaxDecPerSecond() * 0.3);
     joystickYUsed = true;
     
-  } else if (x > 512 + 50) {
+  } else if (x > 512 + 80) {
     
     motor.setDecMaxSpeedPercent((x - 512) / 512.0f);
     motor.moveToDeclination(motor.getDeclination() - motor.getMaxDecPerSecond() * 0.3);
@@ -46,7 +49,10 @@ void Joystick::loop() {
     
     motor.moveToDeclination(motor.getDeclination());
     motor.setDecMaxSpeedPercent(1);
-    joystickYUsed = false;
+    
+    if (!motor.isDecRunning()) {
+      joystickYUsed = false;
+    }
     
   }
   

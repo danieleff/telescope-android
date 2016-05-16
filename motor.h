@@ -36,6 +36,9 @@ class Motor {
 
     float getMaxHaPerSecond();
     float getMaxDecPerSecond();
+
+    bool isHaRunning();
+    bool isDecRunning();
     
     void run();
 

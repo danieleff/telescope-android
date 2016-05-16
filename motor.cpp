@@ -40,7 +40,7 @@ void Motor::setup(boolean a4988) {
   // turn on CTC mode
   TCCR1A |= (1 << WGM11);
   // Set CS21 bit for 8 prescaler
-  TCCR1B |= (1 << CS11);   
+  TCCR1B |= (1 << CS11);
   // enable timer compare interrupt
   TIMSK1 |= (1 << OCIE1A);
   interrupts();
@@ -103,5 +103,13 @@ float Motor::getMaxHaPerSecond() {
 
 float Motor::getMaxDecPerSecond() {
   return this->stepperDec->maxSpeed() * STEPPER_DEC_TO_ARCMILLIS;
+}
+
+bool Motor::isHaRunning() {
+  return this->stepperHa->isRunning();
+}
+
+bool Motor::isDecRunning() {
+  return this->stepperDec->isRunning();
 }
 
