@@ -30,6 +30,11 @@ void IR::loop() {
         case IR_RED   : this->down(T_KEY_STARS);break;
         case IR_GREEN : this->down(T_KEY_DSOS);break;
         case IR_YELLOW: this->down(T_KEY_PLANETS);break;
+
+        case IR_0: this->down(T_KEY_CLEAR);break;
+        case IR_RECORD: this->down(T_KEY_RECORD);break;
+        case IR_1: this->down(T_KEY_1);break;
+        case IR_2: this->down(T_KEY_2);break;
       }
       
     } else {
@@ -50,6 +55,11 @@ void IR::loop() {
         case IR_GREEN : this->hold(T_KEY_DSOS);break;
         case IR_YELLOW: this->hold(T_KEY_PLANETS);break;
 
+        case IR_0: this->hold(T_KEY_CLEAR);break;
+        case IR_RECORD: this->hold(T_KEY_RECORD);break;
+        case IR_1: this->hold(T_KEY_1);break;
+        case IR_2: this->hold(T_KEY_2);break;
+        
       }
     }
 

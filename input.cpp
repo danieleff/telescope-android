@@ -20,10 +20,18 @@ void Input::down(byte key) {
       display.refresh();
     }
     
-  } else {
-    if (key == T_KEY_BACK) {
+  } else if (display.getScreen() == SCREEN_CLEAR) {
+
+    if (key == T_KEY_1) {
+      motor.clearRa(0);
       display.set_screen(SCREEN_HOME);
     }
+    if (key == T_KEY_2) {
+      motor.clearDec(1);
+      display.set_screen(SCREEN_HOME);
+    }
+    
+  } else {
     if (key == T_KEY_OK) {
       astronomy.select(display.getScreen(), selected, objectsToSelect[selected]);
       
@@ -55,6 +63,12 @@ void Input::down(byte key) {
   }
   if (key == T_KEY_PLANETS) {
     display.set_screen(SCREEN_SELECT_PLANET);
+  }
+  if (key == T_KEY_CLEAR) {
+    display.set_screen(SCREEN_CLEAR);
+  }
+  if (key == T_KEY_BACK) {
+    display.set_screen(SCREEN_HOME);
   }
 
   this->hold(key);

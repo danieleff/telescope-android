@@ -34,6 +34,9 @@ class Motor {
     void moveToHourAngle(float ha);
     void moveToDeclination(float dec);
 
+    void clearRa(float ra);
+    void clearDec(float dec);
+
     float getMaxHaPerSecond();
     float getMaxDecPerSecond();
 

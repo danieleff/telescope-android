@@ -16,6 +16,11 @@ const byte T_KEY_STARS = 9;
 const byte T_KEY_DSOS = 10;
 const byte T_KEY_PLANETS = 11;
 
+const byte T_KEY_CLEAR = 12;
+const byte T_KEY_RECORD = 13;
+const byte T_KEY_1 = 14;
+const byte T_KEY_2 = 15;
+
 class Input {
   public:
     void down(byte key);

@@ -15,6 +15,7 @@ const uint32_t IR_OK = 0xDE272CB6;
 
 const uint32_t IR_STOP = 0x98519C65;
 const uint32_t IR_PLAY = 0xAFAF8374;
+const uint32_t IR_RECORD = 0xE5BD88F4;
 
 const uint32_t IR_RED = 0xF21D7D46;
 const uint32_t IR_GREEN = 0x87CF1B29;

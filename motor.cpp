@@ -113,3 +113,11 @@ bool Motor::isDecRunning() {
   return this->stepperDec->isRunning();
 }
 
+void Motor::clearRa(float ra) {
+  this->stepperHa->setCurrentPosition(0);
+}
+
+void Motor::clearDec(float dec) {
+  this->stepperDec->setCurrentPosition(0);
+}
+
