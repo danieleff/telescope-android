@@ -23,6 +23,7 @@ void setup() {
   ir.setup();
   uart.setup();
   display.setup();
+  astronomy.setData(new ProgmemAstronomyData());
 }
 
 void loop() {

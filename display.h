@@ -12,6 +12,9 @@ const byte SCREEN_SELECT_STAR = 1;
 const byte SCREEN_SELECT_PLANET = 2;
 const byte SCREEN_SELECT_DSO = 3;
 
+const byte SCREEN_CLEAR = 4;
+const byte SCREEN_SET = 5;
+
 extern short selected;
 
 class Display {
@@ -26,6 +29,7 @@ class Display {
   private:
     void homeLoop();
     void selectLoop();
+    void loopClear();
     unsigned long last_lcd_millis;
     LiquidCrystal_I2C lcd;
 

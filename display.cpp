@@ -24,6 +24,9 @@ byte Display::getScreen() {
   return screen;
 }
 
+
+extern int loopsPerSecond;
+
 void Display::homeLoop() {
   this->lcd.setCursor(0, 0);
   this->lcd.print(astronomy.ra_to_string(astronomy.haToRa(motor.getHourAngle())));
@@ -39,11 +42,8 @@ void Display::homeLoop() {
     
     this->lcd.setCursor(0, 2);
     this->lcd.print(astronomy.ra_to_string(ra));
-    //this->lcd20x4.print(objectSelected.index);
     this->lcd.setCursor(0, 3);
     this->lcd.print(astronomy.dec_to_string(dec));
-    //lcd.print(planetMeta[objectSelected.index * 3 + 2]);
-    
     
 
     String s(objectSelected.object.name);
@@ -58,7 +58,8 @@ void Display::homeLoop() {
     DateTime now = time.getTime();
 
     this->lcd.setCursor(0, 2);
-    this->lcd.print(time.getTimestamp());
+    //this->lcd.print(time.getTimestamp());
+    this->lcd.print(loopsPerSecond);
     
     this->lcd.setCursor(0, 3);
     this->lcd.print(now.year(), DEC);
@@ -92,12 +93,14 @@ void Display::homeLoop() {
 
 void Display::selectLoop() {
 
-  if (screen == SCREEN_SELECT_STAR) {
-    memcpy_P(&objectsToSelect, &stars[0], sizeof(objectsToSelect));
-  } else if (screen == SCREEN_SELECT_DSO) {
-    memcpy_P(&objectsToSelect, &dsos[0], sizeof(objectsToSelect));
-  } else {
-    memcpy_P(&objectsToSelect, &planets[0], sizeof(objectsToSelect));
+  for(int i=0;i<8;i++) {
+    if (screen == SCREEN_SELECT_STAR) {
+      objectsToSelect[i] = astronomy.getData()->get(STAR, i);
+    } else if (screen == SCREEN_SELECT_DSO) {
+      objectsToSelect[i] = astronomy.getData()->get(DSO, i);
+    } else {
+      objectsToSelect[i] = astronomy.getData()->get(PLANET, i);
+    }
   }
   
   this->lcd.setCursor(1, 0);
@@ -129,6 +132,21 @@ void Display::selectLoop() {
   
 }
 
+void Display::loopClear() {
+  this->lcd.setCursor(0, 0);
+  this->lcd.print(F("1. Set Ra to 0"));
+  
+  this->lcd.setCursor(0, 1);
+  this->lcd.print(F("2. Set Dec to 0"));
+
+  this->lcd.setCursor(0, 2);
+  this->lcd.print(F("3. Clear first star"));
+
+  this->lcd.setCursor(0, 3);
+  this->lcd.print(F("4. Clear second star"));
+  
+}
+
 void Display::loop() {
   if (millis()-this->last_lcd_millis > 100) {
     
@@ -138,6 +156,8 @@ void Display::loop() {
       || screen == SCREEN_SELECT_PLANET
       || screen == SCREEN_SELECT_DSO) {
       this->selectLoop();
+    } else if (screen == SCREEN_CLEAR) {
+      this->loopClear();
     }
     this->last_lcd_millis = millis();
   }

@@ -18,16 +18,36 @@ struct AstronomicalObjectSelected {
   AstronomicalObject object;
 };
 
-extern const AstronomicalObject stars[] PROGMEM;
-extern const AstronomicalObject dsos[] PROGMEM;
-extern const AstronomicalObject planets[] PROGMEM;
-extern const AstronomicalObjectTime planetsTime[] PROGMEM;
-extern const short planetMeta[];
-extern const float planetStartJulian;
-extern const long planetStartSeconds;
+enum CelectialType {
+  STAR, DSO, PLANET
+};
+
+class AstronomyData {
+  public:
+    virtual long size(CelectialType type)=0;
+    virtual AstronomicalObject get(CelectialType type, long index)=0;
+};
+
+class ProgmemAstronomyData: public AstronomyData {
+  public:
+    long size(CelectialType type);
+    AstronomicalObject get(CelectialType type, long index);
+};
+class EpromAstronomyData: public AstronomyData {
+  public:
+    long size(CelectialType type);
+    AstronomicalObject get(CelectialType type, long index);
+};
+class SDAstronomyData: public AstronomyData {
+  public:
+    long size(CelectialType type);
+    AstronomicalObject get(CelectialType type, long index);
+};
 
 class Astronomy {
   public:
+    void setData(AstronomyData *data);
+    AstronomyData *getData();
     void loop();
     char* ra_to_string(double ra);
     char* dec_to_string(double dec);
@@ -38,7 +58,7 @@ class Astronomy {
     float haToRa(float ra);
     
   private:
-    
+    AstronomyData *data;
     char* float_to_string(double value, bool isDeclincation);
     void print_2digits(char* str, int i);
     AstronomicalObjectSelected objectSelected;

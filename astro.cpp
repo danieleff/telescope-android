@@ -8,22 +8,49 @@
 #include "generated/dsos.h"
 #include "generated/planets.h"
 
-void Astronomy::loop() {
-  if (this->objectSelected.type == SCREEN_SELECT_PLANET) {
-      long unix_1970_seconds = time.getTimestamp();
+long ProgmemAstronomyData::size(CelectialType type) {
+  return 0;
+}
+AstronomicalObject ProgmemAstronomyData::get(CelectialType type, long index) {
+  
+  AstronomicalObject ret;
+  if (type == STAR) {
+    memcpy_P(&ret, &stars[index], sizeof(ret));
+  } else if (type == DSO) {
+    memcpy_P(&ret, &dsos[index], sizeof(ret));
+  } else if (type == PLANET) {
+    memcpy_P(&ret, &planets[index], sizeof(ret));
+
+    long unix_1970_seconds = time.getTimestamp();
       
-      long delta = unix_1970_seconds - planetStartSeconds;
-      float x = (float)delta / (planetMeta[objectSelected.index * 3 + 1] * 60 * 60);
-      //TODO 0 < x < meta
-      float y = x - floor(x);
+    long delta = unix_1970_seconds - planetStartSeconds;
+    float x = (float)delta / (planetMeta[index * 3 + 1] * 60 * 60);
+    //TODO 0 < x < meta
+    float y = x - floor(x);
   
-      AstronomicalObject interpolate1, interpolate2;
+    AstronomicalObject interpolate1, interpolate2;
   
-      memcpy_P(&interpolate1, &planetsTime[(int)floor(x) + planetMeta[this->objectSelected.index * 3 + 2]], sizeof(interpolate1));
-      memcpy_P(&interpolate2, &planetsTime[(int)floor(x) + 1 + planetMeta[this->objectSelected.index * 3 + 2]], sizeof(interpolate2));
+    memcpy_P(&interpolate1, &planetsTime[(int)floor(x) + planetMeta[index * 3 + 2]], sizeof(interpolate1));
+    memcpy_P(&interpolate2, &planetsTime[(int)floor(x) + 1 + planetMeta[index * 3 + 2]], sizeof(interpolate2));
   
-      this->objectSelected.object.ra = interpolate1.ra * (1 - y) + interpolate2.ra * y;
-      this->objectSelected.object.dec = interpolate1.dec * (1 - y) + interpolate2.dec * y;
+    ret.ra = interpolate1.ra * (1 - y) + interpolate2.ra * y;
+    ret.dec = interpolate1.dec * (1 - y) + interpolate2.dec * y;
+  }
+  return ret;
+}
+    
+
+void Astronomy::setData(AstronomyData *data) {
+  this->data = data;
+}
+
+AstronomyData *Astronomy::getData() {
+  return data;
+}
+
+void Astronomy::loop() {
+  if (this->objectSelected.type == PLANET) {
+    objectSelected.object = this->getData()->get(PLANET, this->objectSelected.index);
   }
 }
 
