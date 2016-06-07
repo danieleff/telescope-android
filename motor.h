@@ -1,7 +1,8 @@
 #ifndef MOTOR_H
 #define MOTOR_H
 
-#include <AccelStepper.h>
+#include <Arduino.h>
+#include "Stepper.h"
 
 const long steps_per_turn = 200;
 const long gear_ratio = 200;
@@ -46,8 +47,8 @@ class Motor {
     void run();
 
   private:
-    AccelStepper *stepperHa;
-    AccelStepper *stepperDec;
+    Stepper *stepperHa;
+    Stepper *stepperDec;
 
     int topHaSpeed;
     int topDecSpeed;

@@ -5,23 +5,24 @@ byte tracking = TRACKING_OFF;
 
 void Motor::setup(boolean a4988) {
   if (a4988) {
-    this->stepperHa = new AccelStepper(AccelStepper::DRIVER, 10/*step*/, 11/*dir*/); 
+    this->stepperHa = new (Stepper::DRIVER, 10/*step*/, 11/*dir*/); 
     this->stepperHa->setMaxSpeed(1800.0);
     this->stepperHa->setAcceleration(6000.0);
      
-    this->stepperDec = new AccelStepper(AccelStepper::DRIVER, 12/*step*/, 13/*dir*/); 
+    this->stepperDec = new Stepper(Stepper::DRIVER, 12/*step*/, 13/*dir*/); 
     this->stepperDec->setMaxSpeed(1800.0);
     this->stepperDec->setAcceleration(6000.0);
     
   } else {
-    
-    this->stepperHa = new AccelStepper(AccelStepper::HALF4WIRE, 10, 12, 11, 13);
+    /*
+    this->stepperHa = new Stepper(AccelStepper::HALF4WIRE, 10, 12, 11, 13);
     this->stepperHa->setMaxSpeed(1500.0);
     this->stepperHa->setAcceleration(2000.0);
     
-    this->stepperDec = new AccelStepper(AccelStepper::HALF4WIRE, 14, 16, 15, 17);
+    this->stepperDec = new Stepper(AccelStepper::HALF4WIRE, 14, 16, 15, 17);
     this->stepperDec->setMaxSpeed(1500.0);
     this->stepperDec->setAcceleration(2000.0);
+    */
   }
 
   this->topHaSpeed = this->stepperHa->maxSpeed();
@@ -55,6 +56,7 @@ void Motor::loop() {
     
     this->moveToDeclination(objectSelected.object.dec);
   }
+
   
 }
 
