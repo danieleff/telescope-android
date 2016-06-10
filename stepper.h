@@ -8,13 +8,13 @@ class Stepper {
     Stepper(int unused, int stepPin, int dirPin);
     bool isRunning();
     
-    void setMaxSpeed(long maxSpeed);
-    long maxSpeed();
+    void setMaxSpeed(float maxSpeed);
+    float maxSpeed();
     
     void setCurrentPosition(long position);
     void moveTo(long position);
     
-    void setAcceleration(long ignore);
+    void setAcceleration(float ignore);
     
     long currentPosition();
     void run();
@@ -27,9 +27,10 @@ class Stepper {
     long position;
     long moveToPosition;
     long moveToPosition2;
-    long maxSpd;
+    float maxSpd;
     
     long stepInterval;
+    long maxStepInterval;
     
     unsigned long lastStepTime;
     

@@ -5,13 +5,15 @@ byte tracking = TRACKING_OFF;
 
 void Motor::setup(boolean a4988) {
   if (a4988) {
-    this->stepperHa = new (Stepper::DRIVER, 10/*step*/, 11/*dir*/); 
+    
+    this->stepperHa = new Stepper(Stepper::DRIVER, 10/*step*/, 11/*dir*/); 
     this->stepperHa->setMaxSpeed(1800.0);
     this->stepperHa->setAcceleration(6000.0);
-     
+    
     this->stepperDec = new Stepper(Stepper::DRIVER, 12/*step*/, 13/*dir*/); 
     this->stepperDec->setMaxSpeed(1800.0);
     this->stepperDec->setAcceleration(6000.0);
+     
     
   } else {
     /*
