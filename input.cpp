@@ -75,24 +75,27 @@ void Input::down(byte key) {
 }
 void Input::hold(byte key) {
 
-  /*
-  if (screen == SCREEN_HOME) {
+  
+  if (display.getScreen() == SCREEN_HOME) {
     if (key == T_KEY_UP) {
       
-      stepper_ra.moveTo(stepper_ra.currentPosition() + stepper_ra.maxSpeed() );
-      last_lcd_millis = 0;
+      motor.moveToHourAngle(motor.getHourAngle() - motor.getMaxHaPerSecond() * 0.15);
+      
     } else if (key == T_KEY_DOWN) {
-      stepper_ra.moveTo(stepper_ra.currentPosition() - stepper_ra.maxSpeed() );
-      last_lcd_millis = 0;
+      
+      motor.moveToHourAngle(motor.getHourAngle() + motor.getMaxHaPerSecond() * 0.15);
+      
     } else if (key == T_KEY_LEFT) {
-      stepper_dec.moveTo(stepper_dec.currentPosition() - stepper_ra.maxSpeed() );
-      last_lcd_millis = 0;
+      
+      motor.moveToDeclination(motor.getDeclination() - motor.getMaxDecPerSecond() * 0.15);
+      
     } else if (key == T_KEY_RIGHT) {
-      stepper_dec.moveTo(stepper_dec.currentPosition() + stepper_ra.maxSpeed() );
-      last_lcd_millis = 0;
+      
+      motor.moveToDeclination(motor.getDeclination() + motor.getMaxDecPerSecond() * 0.15);
+      
     }
   }
-  */
+  
   
 }
 

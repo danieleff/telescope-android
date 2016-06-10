@@ -39,8 +39,6 @@ void IR::loop() {
       
     } else {
 
-      Serial.println(this->results.value, HEX);
-      
       switch(this->results.value) {
         case IR_UP    : this->hold(T_KEY_UP);break;
         case IR_DOWN  : this->hold(T_KEY_DOWN);break;
