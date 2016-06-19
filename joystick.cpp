@@ -6,7 +6,6 @@ void Joystick::setup() {
 }
 
 void Joystick::loop() {
-
   
   int x = analogRead(A0);
   if (x < 512 - 80) {

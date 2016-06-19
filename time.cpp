@@ -1,33 +1,36 @@
 #include "time.h"
 
 void Time::setup() {
-  this->softwareRtc.begin(DateTime(F(__DATE__), F(__TIME__)) - TimeSpan(0, 2, 0, 0)); //Adjusted for timezone
+  
+  softwareRtc.begin(DateTime(F(__DATE__), F(__TIME__)) - TimeSpan(0, 2, 0, 0)); //Adjusted for timezone
+  
+  hardwareExists = hardwareRtc.begin();
 }
 
 DateTime Time::getTime() {
-  return this->softwareRtc.now();
+  if (hardwareExists) {
+    return this->hardwareRtc.now();
+  } else {
+    return this->softwareRtc.now();
+  }
 }
 
-long Time::getTimestamp() {
-  return this->softwareRtc.now().unixtime();
-}
-
-void Time::setTime(long time) {
+void Time::setTime(uint32_t time) {
   this->softwareRtc.adjust(time);
+  if (hardwareExists) {
+      this->hardwareRtc.adjust(time);
+  }
 }
 
-void Time::loop() {
-  
-}
 
-int Time::getMillisFraction() {
-  long now = this->getTimestamp();
+uint16_t Time::getMillisFraction() {
+  uint32_t now = this->getTime().unixtime();
   if (now != this->lastTime) {
     this->millisStart = millis();
     this->lastTime = now;
   }
 
-  int ret = millis() - this->millisStart;
+  uint16_t ret = millis() - this->millisStart;
   if (ret > 1000) ret = 1000;
   return ret;
 }

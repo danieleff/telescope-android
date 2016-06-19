@@ -21,8 +21,12 @@ const byte T_KEY_RECORD = 13;
 const byte T_KEY_1 = 14;
 const byte T_KEY_2 = 15;
 
+const byte T_KEY_PGDOWN = 16;
+const byte T_KEY_PGUP = 17;
+
 class Input {
   public:
+    void key(byte k, bool d);
     void down(byte key);
     void hold(byte key);
     

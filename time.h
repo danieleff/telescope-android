@@ -6,16 +6,16 @@
 class Time {
   public: 
     void setup();
-    void loop();
     
     DateTime getTime();
-    long getTimestamp();
-    int getMillisFraction();
+    uint16_t getMillisFraction();
     
-    void setTime(long time);
+    void setTime(uint32_t time);
     
   private:
     RTC_Millis softwareRtc;
+    RTC_DS1307 hardwareRtc;
+    bool hardwareExists;
     long lastTime;
     int millisStart;
 };

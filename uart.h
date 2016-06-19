@@ -3,13 +3,17 @@
 
 #include <Arduino.h>
 
+#define BUFFER_MAX 24
+
 class UART  {
   public:
     void setup();
     void loop();
     
   private:
-    String input;
+    char buffer[BUFFER_MAX];
+    uint8_t buffer_index;
+    
     unsigned long lastTime;
     
     void parseInput();

@@ -6,18 +6,21 @@
 
 void UART::setup() {
   Serial.begin(115200);
-  Serial.setTimeout(100);
+  buffer_index=0;
 }
 
 void UART::loop() {
   while (Serial.available() > 0)
     {
         char recieved = Serial.read();
-        this->input += recieved; 
+        buffer[buffer_index] = recieved;
+        buffer_index++;
 
-        if (recieved == '\n') {
+        if (recieved == '\n' || buffer_index >= BUFFER_MAX) {
+          buffer[buffer_index] = 0;
+          
           this->parseInput();
-          input = "";
+          buffer_index = 0;
         }
     }
     
@@ -35,22 +38,25 @@ void UART::loop() {
 
 
 void UART::parseInput() {
-  if (this->input.startsWith("Move ")) {
-    float ra = this->input.substring(5).toFloat();
-    float dec = this->input.substring(input.indexOf(' ', 6)).toFloat();
+
+  if (strncmp(buffer, "Move", 4) == 0) {
+
+    float ra;
+    float dec;
+
+    memcpy(&ra, buffer + 4, 4);
+    memcpy(&dec, buffer + 8, 4);
     
     AstronomicalObject obj;
     strcpy(obj.name, "Serial");
     obj.ra = ra;
     obj.dec = dec;
-    astronomy.select(SCREEN_SELECT_STAR, 1, obj);
+    astronomy.select(CELESTIAL_STAR, 0, obj);
     
-  } else if (this->input.startsWith("Time ")) {
+  } else if (strncmp(buffer, "Time", 4) == 0) {
 
-    time.setTime(this->input.substring(5).toInt());
+    time.setTime(atol(buffer + 5));
     
-  } else {
-    //Serial.println(input.c_str());
   }
 }
 

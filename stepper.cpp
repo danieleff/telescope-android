@@ -4,7 +4,8 @@
 
 int Stepper::DRIVER = 0;
 
-Stepper::Stepper(int unused, int stepPin, int dirPin) {
+Stepper::Stepper(uint8_t unused, uint8_t stepPin, uint8_t dirPin) {
+  
   this->stepPin = stepPin;
   this->dirPin = dirPin;
   setCurrentPosition(0);
@@ -54,6 +55,7 @@ void Stepper::moveTo(long moveToPosition) {
     this->moveToPosition2 = moveToPosition;
     
   }
+
 }
 
 bool Stepper::isRunning() {
@@ -95,7 +97,7 @@ void Stepper::run() {
       return;
     }
   }
-  
+
   unsigned long time = micros();
   unsigned long nextStepTime = lastStepTime + stepInterval;
   
@@ -104,7 +106,7 @@ void Stepper::run() {
     
     digitalWrite(stepPin, HIGH);
   
-    position += (this->position < moveToPosition) ? 1 : -1;
+    this->position += (this->position < moveToPosition) ? 1 : -1;
     
     lastStepTime = time;
     if ( abs(this->position - moveToPosition) < 20) {

@@ -8,9 +8,20 @@ extern AstronomicalObject objectsToSelect[8];
 
 extern Display display;
 
-void Input::down(byte key) {
+void Input::key(byte k, bool d) {
+  if (d) {
+    down(k);
+  } else {
+    hold(k);
+  }
+}
 
-  if (display.getScreen() == SCREEN_HOME) {
+void Input::down(byte key) {
+  byte screen = display.getScreen();
+  
+  bool reload_objects = false;
+  
+  if (screen == SCREEN_HOME) {
     
     if (key == T_KEY_STOP) {
       tracking = TRACKING_OFF;
@@ -20,61 +31,87 @@ void Input::down(byte key) {
       display.refresh();
     }
     
-  } else if (display.getScreen() == SCREEN_CLEAR) {
+  } else if (screen == SCREEN_CLEAR) {
 
     if (key == T_KEY_1) {
       motor.clearRa(0);
-      display.set_screen(SCREEN_HOME);
+      display.setScreen(SCREEN_HOME);
     }
     if (key == T_KEY_2) {
       motor.clearDec(1);
-      display.set_screen(SCREEN_HOME);
+      display.setScreen(SCREEN_HOME);
     }
     
-  } else {
+  } else if (screen == SCREEN_SELECT) {
     if (key == T_KEY_OK) {
-      astronomy.select(display.getScreen(), selected, objectsToSelect[selected]);
+      astronomy.select(display.getSelectedType(), display.getSelectedIndex(), objectsToSelect[display.getSelectedIndex() % 8]);
       
-      display.set_screen(SCREEN_HOME);
+      display.setScreen(SCREEN_HOME);
     }
-  
+
+    int index = display.getSelectedIndex();
+    
     if (key == T_KEY_UP) {
-      selected -= 2;
+      index -= 2;
     }
     if (key == T_KEY_DOWN) {
-      selected += 2;
+      index += 2;
     }
     if (key == T_KEY_LEFT) {
-      selected -= 1;
+      index -= 1;
     }
     if (key == T_KEY_RIGHT) {
-      selected += 1;
+      index += 1;
     }
-    if (selected< 0) selected+=8;
-    if (selected>=8) selected-=8;
+    if (key == T_KEY_PGUP) {
+      index -= 8;
+    }
+    if (key == T_KEY_PGDOWN) {
+      index += 8;
+    }
+    //if (key == T_KEY_0) {
+    //  index += 0;
+    //}
+    if (index <  0) index = 0;
+    //if (index >= 1000) index-= 1000;
+
+    reload_objects = true;
+    display.setSelectedIndex(index);
     
   }
-    
+  
   if (key == T_KEY_STARS) {
-    display.set_screen(SCREEN_SELECT_STAR);
+    display.setScreen(SCREEN_SELECT, CELESTIAL_STAR);
+    reload_objects = true;
   }
   if (key == T_KEY_DSOS) {
-    display.set_screen(SCREEN_SELECT_DSO);
+    display.setScreen(SCREEN_SELECT, CELESTIAL_DSO);
+    reload_objects = true;
   }
   if (key == T_KEY_PLANETS) {
-    display.set_screen(SCREEN_SELECT_PLANET);
+    display.setScreen(SCREEN_SELECT, CELESTIAL_PLANET);
+    reload_objects = true;
   }
+
+  if (reload_objects) {
+    uint8_t type = display.getSelectedType();
+    
+    for(int i=0;i<8;i++) {
+      objectsToSelect[i] = astronomy.getData()->get(type, i + (display.getSelectedIndex() / 8) * 8);
+    }
+  }
+  
   if (key == T_KEY_CLEAR) {
-    display.set_screen(SCREEN_CLEAR);
+    display.setScreen(SCREEN_CLEAR);
   }
   if (key == T_KEY_BACK) {
-    display.set_screen(SCREEN_HOME);
+    display.setScreen(SCREEN_HOME);
   }
 
   this->hold(key);
 }
-void Input::hold(byte key) {
 
+void Input::hold(byte key) {
   
   if (display.getScreen() == SCREEN_HOME) {
     if (key == T_KEY_UP) {

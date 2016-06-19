@@ -6,13 +6,21 @@ byte tracking = TRACKING_OFF;
 void Motor::setup(boolean a4988) {
   if (a4988) {
     
-    this->stepperHa = new Stepper(Stepper::DRIVER, 10/*step*/, 11/*dir*/); 
+    this->stepperHa = new Stepper(Stepper::DRIVER, 4/*step*/, 5/*dir*/); 
     this->stepperHa->setMaxSpeed(1800.0);
     this->stepperHa->setAcceleration(6000.0);
     
-    this->stepperDec = new Stepper(Stepper::DRIVER, 12/*step*/, 13/*dir*/); 
+    this->stepperDec = new Stepper(Stepper::DRIVER, 6/*step*/, 7/*dir*/); 
     this->stepperDec->setMaxSpeed(1800.0);
     this->stepperDec->setAcceleration(6000.0);
+    
+    //this->stepperHa = new Stepper(Stepper::DRIVER, 10/*step*/, 11/*dir*/); 
+    //this->stepperHa->setMaxSpeed(1800.0);
+    //this->stepperHa->setAcceleration(6000.0);
+    
+    //this->stepperDec = new Stepper(Stepper::DRIVER, 12/*step*/, 13/*dir*/); 
+    //this->stepperDec->setMaxSpeed(1800.0);
+    //this->stepperDec->setAcceleration(6000.0);
      
     
   } else {
@@ -37,8 +45,6 @@ void Motor::setup(boolean a4988) {
   
   // set compare match register for 8khz increments
   OCR1A = 249;// = (16*10^6) / (8000*8) - 1 (must be <256)
-  //32Khz
-  //OCR1A = 62;// = (16*10^6) / (8000*8) - 1 (must be <256)
   
   // turn on CTC mode
   TCCR1A |= (1 << WGM11);

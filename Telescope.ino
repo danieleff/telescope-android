@@ -16,23 +16,27 @@ Joystick joystick;
 IR ir;
 UART uart;
 
-void setup() {
+void setup() {  
   time.setup();
   motor.setup(true);
+  
   joystick.setup();
   ir.setup();
   uart.setup();
   display.setup();
-  astronomy.setData(new ProgmemAstronomyData());
+  
+  //astronomy.setData(new ProgmemAstronomyData());
+  astronomy.setData(new SDAstronomyData());
+  
 }
 
 void loop() {
-  time.loop();
+  
   motor.loop();
   joystick.loop();
   ir.loop();
-  uart.loop();
   display.loop();
+  uart.loop();
   astronomy.loop();
 }
 

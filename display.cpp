@@ -2,21 +2,28 @@
 
 AstronomicalObject objectsToSelect[8];
 
-byte screen = SCREEN_HOME;
-
-short selected = 0;
-
 void Display::setup() {
+  
   this->lcd.begin(20,4);
   last_lcd_millis=-1000;
+  screen = SCREEN_HOME;
 }
 
 void Display::refresh() {
   last_lcd_millis = 0;
 }
 
-void Display::set_screen(byte new_screen) {
-  screen=new_screen;
+void Display::clear() {
+  this->lcd.clear();
+}
+
+void Display::setScreen(uint8_t screen) {
+  this->screen = screen;
+  this->lcd.clear();
+}
+void Display::setScreen(uint8_t screen, uint8_t celestialType) {
+  this->screen = screen;
+  this->celestialType = celestialType;
   this->lcd.clear();
 }
 
@@ -24,14 +31,32 @@ byte Display::getScreen() {
   return screen;
 }
 
+void Display::setSelectedIndex(uint16_t selectedIndex) {
+  this->selectedIndex = selectedIndex;
+}
 
-extern int loopsPerSecond;
+uint16_t Display::getSelectedIndex() {
+  return selectedIndex;
+}
+
+uint8_t Display::getSelectedType() {
+  return celestialType;
+}
+
+void Display::print(uint8_t x, uint8_t y, const char* str) {
+  lcd.setCursor(x, y);
+  lcd.print(str);
+}
+/*
+void Display::printMin2Digits(uint8_t x, uint8_t y, int i) {
+  lcd.setCursor(x, y);
+  if (i<10) lcd.print('0');
+  lcd.print(i);
+}*/
 
 void Display::homeLoop() {
-  this->lcd.setCursor(0, 0);
-  this->lcd.print(astronomy.ra_to_string(astronomy.haToRa(motor.getHourAngle())));
-  this->lcd.setCursor(0, 1);
-  this->lcd.print(astronomy.dec_to_string(motor.getDeclination()));
+  print(0, 0, astronomy.ra_to_string(astronomy.haToRa(motor.getHourAngle())));
+  print(0, 1, astronomy.dec_to_string(motor.getDeclination()));
    
   AstronomicalObjectSelected objectSelected = astronomy.getSelected();
   
@@ -39,100 +64,62 @@ void Display::homeLoop() {
     float ra = objectSelected.object.ra;
     float dec = objectSelected.object.dec;
 
-    
-    this->lcd.setCursor(0, 2);
-    this->lcd.print(astronomy.ra_to_string(ra));
-    this->lcd.setCursor(0, 3);
-    this->lcd.print(astronomy.dec_to_string(dec));
-    
 
-    String s(objectSelected.object.name);
+    print(0, 2, astronomy.ra_to_string(ra));
+    print(0, 3, astronomy.dec_to_string(dec));
+
     this->lcd.setCursor(14, 2);
-    this->lcd.print(s.substring(0, 6).c_str());
-    this->lcd.setCursor(14, 3);
-    this->lcd.print(s.substring(6).c_str());
+    this->lcd.write(objectSelected.object.name, 6);
+    
+    print(14, 3, objectSelected.object.name + 6);
     
   } else {
     
 
     DateTime now = time.getTime();
-
-    this->lcd.setCursor(0, 2);
-    //this->lcd.print(time.getTimestamp());
-    this->lcd.print(loopsPerSecond);
     
     this->lcd.setCursor(0, 3);
-    this->lcd.print(now.year(), DEC);
+    this->lcd.print(now.year());
     this->lcd.print('-');
     if (now.month()<10) lcd.print('0');
-    this->lcd.print(now.month(), DEC);
+    this->lcd.print(now.month());
     this->lcd.print('-');
     if (now.day()<10) lcd.print('0');
-    this->lcd.print(now.day(), DEC);
+    this->lcd.print(now.day());
     
     this->lcd.print(' ');
     if (now.hour()<10) lcd.print('0');
-    this->lcd.print(now.hour(), DEC);
+    this->lcd.print(now.hour());
     this->lcd.print(':');
     if (now.minute()<10) lcd.print('0');
-    this->lcd.print(now.minute(), DEC);
+    this->lcd.print(now.minute());
     this->lcd.print(':');
     if (now.second()<10) lcd.print('0');
-    this->lcd.print(now.second(), DEC);
+    this->lcd.print(now.second());
+    
   }
-
+/*
   lcd.setCursor(14, 0);
   if (tracking == TRACKING_OFF) {
-    this->lcd.print(F("   OFF"));
+    this->lcd.print("   OFF");
   } else if (tracking == TRACKING_FOLLOW) {
-    this->lcd.print(F("FOLLOW"));
+    this->lcd.print("FOLLOW");
   } else if (tracking == TRACKING_MANUAL) {
-    this->lcd.print(F("MANUAL"));
-  }
+    this->lcd.print("MANUAL");
+  }*/
 }
 
 void Display::selectLoop() {
 
   for(int i=0;i<8;i++) {
-    if (screen == SCREEN_SELECT_STAR) {
-      objectsToSelect[i] = astronomy.getData()->get(STAR, i);
-    } else if (screen == SCREEN_SELECT_DSO) {
-      objectsToSelect[i] = astronomy.getData()->get(DSO, i);
-    } else {
-      objectsToSelect[i] = astronomy.getData()->get(PLANET, i);
-    }
-  }
-  
-  this->lcd.setCursor(1, 0);
-  this->lcd.print(objectsToSelect[0].name);
-  this->lcd.setCursor(11, 0);
-  this->lcd.print(objectsToSelect[1].name);
-  this->lcd.setCursor(1, 1);
-  this->lcd.print(objectsToSelect[2].name);
-  this->lcd.setCursor(11, 1);
-  this->lcd.print(objectsToSelect[3].name);
-  this->lcd.setCursor(1, 2);
-  this->lcd.print(objectsToSelect[4].name);
-  this->lcd.setCursor(11, 2);
-  this->lcd.print(objectsToSelect[5].name);
-  
-  this->lcd.setCursor(1, 3);
-  this->lcd.print(objectsToSelect[6].name);
-  this->lcd.setCursor(11, 3);
-  this->lcd.print(objectsToSelect[7].name);
-
-  for(int i=0;i<8;i++) {
-    this->lcd.setCursor((i % 2) * 10, (i / 2));
-    if (i == selected) {
-      this->lcd.print('>');
-    } else {
-      this->lcd.print(' ');
-    }
+    print((i % 2) * 10, (i / 2), (i == selectedIndex % 8) ? ">": " ");
+    print(1 + (i % 2) * 10, i / 2, objectsToSelect[i].name);
   }
   
 }
 
 void Display::loopClear() {
+  /*
   this->lcd.setCursor(0, 0);
   this->lcd.print(F("1. Set Ra to 0"));
   
@@ -144,7 +131,7 @@ void Display::loopClear() {
 
   this->lcd.setCursor(0, 3);
   this->lcd.print(F("4. Clear second star"));
-  
+  */
 }
 
 void Display::loop() {
@@ -152,9 +139,7 @@ void Display::loop() {
     
     if (screen == SCREEN_HOME) {
       this->homeLoop();
-    } else if (screen == SCREEN_SELECT_STAR
-      || screen == SCREEN_SELECT_PLANET
-      || screen == SCREEN_SELECT_DSO) {
+    } else if (screen == SCREEN_SELECT) {
       this->selectLoop();
     } else if (screen == SCREEN_CLEAR) {
       this->loopClear();

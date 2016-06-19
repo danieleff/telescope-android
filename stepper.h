@@ -5,7 +5,7 @@
 
 class Stepper {
   public:
-    Stepper(int unused, int stepPin, int dirPin);
+    Stepper(uint8_t unused, uint8_t stepPin, uint8_t dirPin);
     bool isRunning();
     
     void setMaxSpeed(float maxSpeed);
@@ -22,8 +22,8 @@ class Stepper {
     static int DRIVER;
     
   private:
-    int stepPin;
-    int dirPin;
+    uint8_t stepPin;
+    uint8_t dirPin;
     long position;
     long moveToPosition;
     long moveToPosition2;
@@ -33,8 +33,8 @@ class Stepper {
     long maxStepInterval;
     
     unsigned long lastStepTime;
-    
 };
 
 #endif
+
 

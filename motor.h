@@ -4,9 +4,9 @@
 #include <Arduino.h>
 #include "Stepper.h"
 
-const long steps_per_turn = 200;
-const long gear_ratio = 200;
-const long microstep = 1;
+const uint16_t steps_per_turn = 200;
+const uint16_t gear_ratio = 200;
+const uint8_t microstep = 1;
 
 //const float STEPPER_RA_TO_ARCMILLIS = 0.0001f;
 //const float STEPPER_DEC_TO_ARCMILLIS = 0.0015f;
@@ -50,8 +50,8 @@ class Motor {
     Stepper *stepperHa;
     Stepper *stepperDec;
 
-    int topHaSpeed;
-    int topDecSpeed;
+    uint16_t topHaSpeed;
+    uint16_t topDecSpeed;
 };
 
 extern Motor motor;

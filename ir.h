@@ -33,7 +33,11 @@ const uint32_t IR_7 = 0x5C917422;
 const uint32_t IR_8 = 0x9BC33789;
 const uint32_t IR_9 = 0xE4E4282C;
 
-const int RECV_PIN = 9;
+const uint32_t IR_CHANNEL_PLUS = 0x276C161A;
+const uint32_t IR_CHANNEL_MINUS = 0x6852CC8B;
+
+
+const int RECV_PIN = 2;
 
 class IR : Input {
   public:
@@ -43,7 +47,6 @@ class IR : Input {
     
   private:
     IRrecv irrecv;
-    decode_results results;
     unsigned long previous = 0;
 
 };
