@@ -34,11 +34,11 @@ void Input::down(byte key) {
   } else if (screen == SCREEN_CLEAR) {
 
     if (key == T_KEY_1) {
-      motor.clearRa(0);
+      stepperHa.setCurrentPosition(0);
       display.setScreen(SCREEN_HOME);
     }
     if (key == T_KEY_2) {
-      motor.clearDec(1);
+      stepperDec.setCurrentPosition(0);
       display.setScreen(SCREEN_HOME);
     }
     
@@ -112,23 +112,23 @@ void Input::down(byte key) {
 }
 
 void Input::hold(byte key) {
-  
+
   if (display.getScreen() == SCREEN_HOME) {
     if (key == T_KEY_UP) {
       
-      motor.moveToHourAngle(motor.getHourAngle() - motor.getMaxHaPerSecond() * 0.15);
+      stepperHa.moveTo(stepperHa.currentPosition() - stepperHa.maxSpeed() * 0.15);
       
     } else if (key == T_KEY_DOWN) {
       
-      motor.moveToHourAngle(motor.getHourAngle() + motor.getMaxHaPerSecond() * 0.15);
+      stepperHa.moveTo(stepperHa.currentPosition() + stepperHa.maxSpeed() * 0.15);
       
     } else if (key == T_KEY_LEFT) {
       
-      motor.moveToDeclination(motor.getDeclination() - motor.getMaxDecPerSecond() * 0.15);
+      stepperDec.moveTo(stepperDec.currentPosition() - stepperDec.maxSpeed() * 0.15);
       
     } else if (key == T_KEY_RIGHT) {
       
-      motor.moveToDeclination(motor.getDeclination() + motor.getMaxDecPerSecond() * 0.15);
+      stepperDec.moveTo(stepperDec.currentPosition() + stepperDec.maxSpeed() * 0.15);
       
     }
   }

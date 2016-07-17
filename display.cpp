@@ -55,8 +55,8 @@ void Display::printMin2Digits(uint8_t x, uint8_t y, int i) {
 }*/
 
 void Display::homeLoop() {
-  print(0, 0, astronomy.ra_to_string(astronomy.haToRa(motor.getHourAngle())));
-  print(0, 1, astronomy.dec_to_string(motor.getDeclination()));
+  print(0, 0, astronomy.ra_to_string(astronomy.haToRa(stepperHa.currentPosition() * STEPPER_RA_TO_ARCMILLIS)));
+  print(0, 1, astronomy.dec_to_string(stepperDec.currentPosition() * STEPPER_DEC_TO_ARCMILLIS));
    
   AstronomicalObjectSelected objectSelected = astronomy.getSelected();
   

@@ -28,9 +28,9 @@ void UART::loop() {
     if (millis() - this->lastTime > 50) {
       this->lastTime = millis();
       Serial.print("Pos ");
-      Serial.print(astronomy.haToRa(motor.getHourAngle()), 6);
+      Serial.print(astronomy.haToRa(stepperHa.currentPosition() * STEPPER_RA_TO_ARCMILLIS), 6);
       Serial.print(" ");
-      Serial.print(motor.getDeclination(), 6);
+      Serial.print(stepperDec.currentPosition() * STEPPER_DEC_TO_ARCMILLIS, 6);
       Serial.println();
     }
     
