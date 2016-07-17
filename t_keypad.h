@@ -1,4 +1,3 @@
-#include <Keypad.h>
 /*
 const byte KEYPAD_ROWS = 4; //four rows
 const byte KEYPAD_COLS = 4; //three columns

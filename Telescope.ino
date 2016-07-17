@@ -7,6 +7,7 @@
 #include "uart.h"
 #include "ir.h"
 #include "display.h"
+#include "keypad.h"
 
 Time time;
 Astronomy astronomy;
@@ -15,9 +16,11 @@ Display display;
 Joystick joystick;
 IR ir;
 UART uart;
+Key key;
 
 void setup() {  
   time.setup();
+  key.setup();
   
   stepperHa.setMaxSpeed(1800.0);
   stepperHa.setAcceleration(6000.0);
@@ -55,11 +58,11 @@ void loop() {
   
   joystick.loop();
   ir.loop();
+  key.loop();
   display.loop();
   uart.loop();
   astronomy.loop();
-
-
+  
   AstronomicalObjectSelected objectSelected = astronomy.getSelected();
   if (tracking == TRACKING_FOLLOW && objectSelected.object.name[0]) {
     stepperHa.moveTo(astronomy.raToHa(objectSelected.object.ra) / STEPPER_RA_TO_ARCMILLIS);
