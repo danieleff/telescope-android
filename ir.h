@@ -37,7 +37,7 @@ const uint32_t IR_CHANNEL_PLUS = 0x276C161A;
 const uint32_t IR_CHANNEL_MINUS = 0x6852CC8B;
 
 
-const int RECV_PIN = 2;
+const int RECV_PIN = 9;
 
 class IR : Input {
   public:
